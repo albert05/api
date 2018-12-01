@@ -5,6 +5,7 @@ import (
 	"api/services"
 	"fmt"
 	"api/common"
+	"path/filepath"
 )
 
 // Operations about File
@@ -18,7 +19,7 @@ type FileController struct {
 // @Failure 403
 // @router /upload [post]
 func (this *FileController) Upload() {
-	f, _, _ := this.GetFile("image")
+	f, h, _ := this.GetFile("image")
 	defer f.Close()
 
 	path := fmt.Sprintf("%s/%s/", beego.AppConfig.String("fileRootPath"), this.UserKey)
@@ -31,8 +32,9 @@ func (this *FileController) Upload() {
 		}
 	}
 
+	ext := filepath.Ext(filepath.Base(h.Filename))
 	fileName := services.GenerateFileName()
-	this.SaveToFile("image", path + fileName)
+	this.SaveToFile("image", path + fileName + ext)
 
 	this.JsonSucc("success")
 }
