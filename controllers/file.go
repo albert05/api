@@ -12,9 +12,9 @@ type FileController struct {
 // @Failure 403
 // @router /upload [post]
 func (f *FileController) Upload() {
-	f.MustParams("userCode")
+	//f.MustParams("userCode")
 
 	f.JsonSucc("success", map[string]interface{}{
-		"status": 1,
+		"image": f.Params["image"],
 	})
 }
