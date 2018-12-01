@@ -14,7 +14,11 @@ type FileController struct {
 func (f *FileController) Upload() {
 	//f.MustParams("userCode")
 
-	f.JsonSucc("success", map[string]interface{}{
-		"image": f.Params["image"],
-	})
+	m := make(map[string]interface{})
+
+	for k, v := range f.Params {
+		m[k] = v
+	}
+
+	f.JsonSucc("success", m)
 }
