@@ -17,7 +17,7 @@ func init() {
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/file",
 			beego.NSInclude(
-				&controllers.UserController{},
+				&controllers.FileController{},
 			),
 		),
 	)
