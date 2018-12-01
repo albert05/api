@@ -15,7 +15,7 @@ type BaseController struct {
 }
 
 func (ctx *BaseController) Prepare() {
-	json.Unmarshal(ctx.Ctx.Input.RequestBody, &ctx.Params)
+	ctx.ParseForm(&ctx.Params)
 
 	ctx.MustParams("api_key", "api_secret")
 	ctx.MustAuth()
