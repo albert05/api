@@ -1,5 +1,12 @@
 package controllers
 
+import (
+	"github.com/astaxie/beego"
+	"api/services"
+	"fmt"
+	"api/common"
+)
+
 // Operations about File
 type FileController struct {
 	BaseController
@@ -7,18 +14,25 @@ type FileController struct {
 
 // @Title Upload
 // @Description File Upload
-// @Param userCode query string true
 // @Success 200 {int}
 // @Failure 403
 // @router /upload [post]
-func (f *FileController) Upload() {
-	//f.MustParams("userCode")
+func (this *FileController) Upload() {
+	f, _, _ := this.GetFile("image")
+	defer f.Close()
 
-	m := make(map[string]interface{})
+	path := fmt.Sprintf("%s/%s/", beego.AppConfig.String("fileRootPath"), this.UserKey)
 
-	for k, v := range f.Params {
-		m[k] = v
+	if !common.IsExist(path) {
+		if err := common.MakeDir(path); err != nil {
+			this.Abort666("failed", map[string]interface{}{
+				"err": err.Error(),
+			})
+		}
 	}
 
-	f.JsonSucc("success", m)
+	fileName := services.GenerateFileName()
+	this.SaveToFile("image", path + fileName)
+
+	this.JsonSucc("success")
 }

@@ -4,6 +4,10 @@ import (
 	"strings"
 	"strconv"
 	"fmt"
+	"crypto/md5"
+	"math/rand"
+	"time"
+	"os"
 )
 
 func CheckParams(params map[string]string, keys []string) bool {
@@ -35,4 +39,35 @@ func Float2Money(v float64) int {
 func Money2Float(v int) float64 {
 	value, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", float64(v) / 100), 64)
 	return value
+}
+
+func Md5(s string) string {
+	data := []byte(s)
+	has := md5.Sum(data)
+	return fmt.Sprintf("%x", has)
+}
+
+func GenerateRangeNum(min, max int) int {
+	rand.Seed(time.Now().Unix())
+	randNum := rand.Intn(max - min) + min
+	return randNum
+}
+
+// 检查文件或目录是否存在
+// param string filename  文件或目录
+// return bool
+func IsExist(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil || os.IsExist(err)
+}
+
+// 创建目录
+// param string dirPath 目录
+// return error
+func MakeDir(dirPath string) error {
+	if !IsExist(dirPath) {
+		return os.MkdirAll(dirPath, 0755)
+	}
+
+	return nil
 }

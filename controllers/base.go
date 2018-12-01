@@ -4,16 +4,21 @@ import (
 	"github.com/astaxie/beego"
 	"encoding/json"
 	"api/common"
+	"api/models"
 )
 
 // Operations about Users
 type BaseController struct {
 	beego.Controller
 	Params	map[string]string
+	UserKey string
 }
 
 func (ctx *BaseController) Prepare() {
 	json.Unmarshal(ctx.Ctx.Input.RequestBody, &ctx.Params)
+
+	ctx.MustParams("api_key", "api_secret")
+	ctx.MustAuth()
 }
 
 func (ctx *BaseController) MustParams(keys ...string) {
@@ -22,6 +27,27 @@ func (ctx *BaseController) MustParams(keys ...string) {
 			"err": "invalid params",
 		})
 	}
+}
+
+func (ctx *BaseController) MustAuth() {
+	key := ctx.Params["api_key"]
+	secret := ctx.Params["api_secret"]
+
+	v, ok := models.KeyList[key]
+	if  !ok {
+		ctx.Abort666("failed", map[string]interface{}{
+			"err": "invalid params",
+		})
+	}
+
+	_, ok = models.SecretList[secret]
+	if  !ok {
+		ctx.Abort666("failed", map[string]interface{}{
+			"err": "invalid params",
+		})
+	}
+
+	ctx.UserKey = v
 }
 
 func (ctx *BaseController) JsonSucc(msg string, datas ...map[string]interface{}) {
