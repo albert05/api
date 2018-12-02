@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
 	"api/services"
-	"fmt"
 	"api/common"
 	"path/filepath"
 )
@@ -22,8 +20,7 @@ func (this *FileController) Upload() {
 	f, h, _ := this.GetFile("image")
 	defer f.Close()
 
-	path := fmt.Sprintf("%s/%s/", beego.AppConfig.String("fileRootPath"), this.UserKey)
-
+	path := services.GenerateFilePath(this.UserKey)
 	if !common.IsExist(path) {
 		if err := common.MakeDir(path); err != nil {
 			this.Abort666("failed", map[string]interface{}{

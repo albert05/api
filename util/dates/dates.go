@@ -40,6 +40,14 @@ func SleepSecond(t float64) {
 	time.Sleep(time.Duration(t*1000) * time.Millisecond)
 }
 
+func NowYearStr() string {
+	return time.Now().Format("2006")
+}
+
+func NowMonthStr() string {
+	return time.Now().Format("01")
+}
+
 func NowYearMonthStr() string {
 	return time.Now().Format("200601")
 }
