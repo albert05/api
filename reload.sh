@@ -18,7 +18,7 @@ pid = `lsof -i:9999 | grep LISTEN | awk -F '[ ]+' '{print $2}'`
 kill ${pid}
 
 # start fs
-supervisorctl stop api
+supervisorctl start api
 
 # re grant authorization
 chmod -R 755 reload.sh
