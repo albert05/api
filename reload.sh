@@ -12,7 +12,7 @@ cp conf/app.conf.bat conf/app.conf
 supervisorctl stop api
 
 # get listen port
-pid = `lsof -i:9999 | grep LISTEN | awk -F '[ ]+' '{print $2}'`
+pid=`lsof -i:9999 | grep LISTEN | awk -F '[ ]+' '{print $2}'`
 
 # kill port listen
 kill ${pid}
