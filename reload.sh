@@ -21,4 +21,4 @@ kill ${pid}
 supervisorctl stop api
 
 # re grant authorization
-chmod -R 755 restart.sh
+chmod -R 755 reload.sh
