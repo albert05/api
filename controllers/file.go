@@ -4,6 +4,8 @@ import (
 	"api/services"
 	"api/common"
 	"path/filepath"
+	"strings"
+	"github.com/astaxie/beego"
 )
 
 // Operations about File
@@ -30,8 +32,10 @@ func (this *FileController) Upload() {
 	}
 
 	ext := filepath.Ext(filepath.Base(h.Filename))
-	fileName := services.GenerateFileName()
-	this.SaveToFile("image", path + fileName + ext)
+	fileName := path + services.GenerateFileName() + ext
+	this.SaveToFile("image", fileName)
 
-	this.JsonSucc("success")
+	this.JsonSucc("success", map[string]interface{}{
+		"url": strings.Replace(fileName, beego.AppConfig.String("fileRootPath"), beego.AppConfig.String("fileHost"), 1),
+	})
 }
