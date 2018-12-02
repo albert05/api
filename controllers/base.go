@@ -15,11 +15,9 @@ type BaseController struct {
 }
 
 func (ctx *BaseController) Prepare() {
-	ctx.ParseForm(&ctx.Params)
+	json.Unmarshal(ctx.Ctx.Input.RequestBody, &ctx.Params)
 
-	ctx.UserKey = "test"
-	//ctx.MustParams("api_key", "api_secret")
-	//ctx.MustAuth()
+	ctx.MustAuth()
 }
 
 func (ctx *BaseController) MustParams(keys ...string) {
@@ -31,8 +29,8 @@ func (ctx *BaseController) MustParams(keys ...string) {
 }
 
 func (ctx *BaseController) MustAuth() {
-	key := ctx.Params["api_key"]
-	secret := ctx.Params["api_secret"]
+	key := ctx.GetString("api_key")
+	secret := ctx.GetString("api_secret")
 
 	v, ok := models.KeyList[key]
 	if  !ok {
