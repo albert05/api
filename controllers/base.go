@@ -33,20 +33,13 @@ func (ctx *BaseController) MustAuth() {
 	secret := ctx.GetString("api_secret")
 
 	v, ok := models.KeyList[key]
-	if  !ok {
+	if !ok || v != secret {
 		ctx.Abort666("failed", map[string]interface{}{
 			"err": "invalid params",
 		})
 	}
 
-	_, ok = models.SecretList[secret]
-	if  !ok {
-		ctx.Abort666("failed", map[string]interface{}{
-			"err": "invalid params",
-		})
-	}
-
-	ctx.UserKey = v
+	ctx.UserKey = key
 }
 
 func (ctx *BaseController) JsonSucc(msg string, datas ...map[string]interface{}) {
