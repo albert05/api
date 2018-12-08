@@ -37,6 +37,10 @@ func (this *FileController) Upload() {
 	}
 
 	ext := filepath.Ext(filepath.Base(h.Filename))
+	if ext == "" {
+		ext = "." + this.GetString("ext")
+	}
+
 	fileName := path + services.GenerateFileName() + ext
 	this.SaveToFile("image", fileName)
 
