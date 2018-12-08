@@ -41,6 +41,8 @@ func (this *FileController) Upload() {
 	this.SaveToFile("image", fileName)
 
 	this.JsonSucc("success", map[string]interface{}{
+		"path": filepath.Base(h.Filename),
+		"filename": h.Filename,
 		"url": strings.Replace(fileName, beego.AppConfig.String("fileRootPath"), beego.AppConfig.String("fileHost"), 1),
 	})
 }
