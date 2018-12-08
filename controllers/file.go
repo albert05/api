@@ -19,7 +19,12 @@ type FileController struct {
 // @Failure 403
 // @router /upload [post]
 func (this *FileController) Upload() {
-	f, h, _ := this.GetFile("image")
+	f, h, err := this.GetFile("image")
+	if err != nil {
+		this.Abort666("upload failed", map[string]interface{}{
+			"err": err.Error(),
+		})
+	}
 	defer f.Close()
 
 	path := services.GenerateFilePath(this.UserKey)
